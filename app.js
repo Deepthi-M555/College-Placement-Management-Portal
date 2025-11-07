@@ -25,11 +25,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.render("home"));
 app.get("/student/login", (req, res) => res.render("student-login"));
 app.get("/hod/login", (req, res) => res.render("hod-login"));
-app.get("/tpo/login", (req, res) => res.render("tpo-login"));
+app.get("/tpo/login", (req, res) => res.render("tpo/tpologin"));
 app.get("/resume-ai", (req, res) => res.render("resume-ai"));
 
-// ✅ API ROUTES (signup, login)
+// ✅ API ROUTES
 app.use("/api/auth", require("./routes/auth_route"));
+app.use("/api/tpo", require("./routes/tpo/tpo.auth.routes"));  // ✅ teammate’s TPO routes
 
 // ✅ Error handlers
 app.use(notFound);
