@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
-const ROLES = ["STUDENT", "HOD", "TPO"];
-
-const UserSchema = new mongoose.Schema(
+const StudentSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -23,15 +21,13 @@ const UserSchema = new mongoose.Schema(
 
     passwordHash: {
       type: String,
-      required: true, 
-      // ✅ NOTE: we will hash password in the signup route
+      required: true,
     },
 
     role: {
       type: String,
-      enum: ROLES,
-      required: true,
-      index: true,
+      default: "STUDENT",
+      immutable: true,      // ✅ cannot be changed later
     },
 
     departmentId: {
@@ -40,8 +36,7 @@ const UserSchema = new mongoose.Schema(
       default: null,
     },
 
-    // ✅ For students: false until HOD approves
-    // ✅ For HOD + TPO: true from beginning
+    // ✅ Need HOD approval
     isApproved: {
       type: Boolean,
       default: false,
@@ -50,7 +45,7 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Index to speed up queries like: find all students of a department
-UserSchema.index({ role: 1, departmentId: 1 });
+// ✅ Useful index
+StudentSchema.index({ email: 1 });
 
-module.exports = mongoose.model("User", UserSchema);
+//module.exports = mongoose.model("Student", StudentSchema);
