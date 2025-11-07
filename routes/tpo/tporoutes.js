@@ -20,81 +20,89 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
  */
 //rendering signup and login pages
 // ✅ Show Signup Page
+// routes/tpo/tporoutes.js
+
+
+// ⚙️ Adjust this ONLY if your folder is `views/tpo-1`
+const VIEW_BASE = "tpo"; // change to "tpo-1" if your views folder is tpo-1
+
+// ✅ 1) Default → show signup page
 router.get("/", (req, res) => {
-  res.render("tpo/tposignup.ejs", { errors: [] });
+  res.render(`${VIEW_BASE}/tposignup`, { errors: [], old: {} });
 });
 
-// ✅ Show Login Page
+// ✅ 2) Explicit signup page (same view)
 router.get("/signup", (req, res) => {
-  res.render("tpo/tposignup.ejs", { errors: [] });
+  res.render(`${VIEW_BASE}/tposignup`, { errors: [], old: {} });
 });
 
-// ✅ TPO SIGNUP
+// ✅ 3) Handle signup form submit
 router.post("/signup", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+  const { name, email, password } = req.body;
 
-    // ✅ Check existing TPO
-    const existing = await Tpo.findOne({ email });
-    if (existing) {
-      return res.render("tpo/tposignup.ejs", {
-        errors: [{ msg: "Email already exists" }]
+  try {
+    // Email must be unique
+    const exists = await Tpo.findOne({ email });
+    if (exists) {
+      return res.render(`${VIEW_BASE}/tposignup`, {
+        errors: [{ msg: "Email already exists" }],
+        old: { name, email }
       });
     }
 
-    // ✅ Hash Password
+    // Hash & save
     const passwordHash = await bcrypt.hash(password, 10);
+    await Tpo.create({ name, email, passwordHash });
 
-    // ✅ Create TPO entry
-    await Tpo.create({
-      name,
-      email,
-      passwordHash
-    });
-
-    // ✅ Redirect to login
+    // Go to login
     return res.redirect("/tpo/login");
   } catch (err) {
-    console.error("Signup error:", err);
-    return res.render("tpo/tposignup.ejs", {
-      errors: [{ msg: "Server error during signup" }]
+    console.error("TPO signup error:", err);
+    return res.render(`${VIEW_BASE}/tposignup`, {
+      errors: [{ msg: "Server error during signup" }],
+      old: { name, email }
     });
   }
 });
+
+// ✅ 4) Show login page
 router.get("/login", (req, res) => {
-  res.render("tpo/tpologin.ejs", { errors: [], old: {} });
+  res.render(`${VIEW_BASE}/tpologin`, { errors: [], old: {} });
 });
 
-// ✅ TPO LOGIN
+// ✅ 5) Handle login submit
 router.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // ✅ Find TPO
+  try {
     const tpo = await Tpo.findOne({ email });
     if (!tpo) {
-      return res.render("tpo/tpologin.ejs", {
-        errors: [{ msg: "TPO account not found" }]
+      return res.render(`${VIEW_BASE}/tpologin`, {
+        errors: [{ msg: "Invalid email or password" }],
+        old: { email }
       });
     }
 
-    // ✅ Verify Password
-    const valid = await bcrypt.compare(password, tpo.passwordHash);
-    if (!valid) {
-      return res.render("tpo/tpologin.ejs", {
-        errors: [{ msg: "Incorrect password" }]
+    const match = await bcrypt.compare(password, tpo.passwordHash);
+    if (!match) {
+      return res.render(`${VIEW_BASE}/tpologin`, {
+        errors: [{ msg: "Invalid email or password" }],
+        old: { email }
       });
     }
 
-    // ✅ Redirect to dashboard
+    // Success → dashboard
     return res.redirect("/tpo/dashboard");
   } catch (err) {
-    console.error("Login error:", err);
-    return res.render("tpo/tpologin.ejs", {
-      errors: [{ msg: "Server error during login" }]
+    console.error("TPO login error:", err);
+    return res.render(`${VIEW_BASE}/tpologin`, {
+      errors: [{ msg: "Server error during login" }],
+      old: { email }
     });
   }
 });
+
+// ✅ 6) Dashboard
 
 
 // TPO Dashboard
