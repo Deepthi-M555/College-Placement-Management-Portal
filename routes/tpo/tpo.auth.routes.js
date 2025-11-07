@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
+const User = require("../../models/User.js");
+const Company = require("../../models/company.js");
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
@@ -73,8 +74,105 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// TPO Dashboard
 router.get("/dashboard", (req, res) => {
   res.render("tpo/tpodashboard.ejs");
 });
+//company crud
+//  1. View all companies
+router.get("/companies", async (req, res) => {
+  try {
+    const companies = await Company.find({});
+    res.render("tpo/companies", { companies });
+  } catch (err) {
+    console.error("Error fetching companies:", err.message);
+    res.status(500).send("Server error: " + err.message);
+  }
+});
+
+
+// 📍 2. Render Add Company Form
+router.get("/companies/new", (req, res) => {
+  res.render("tpo/companyForm.ejs", { company: null });
+});
+
+// 📍 3. Handle Add Company Form Submission
+router.post("/companies", async (req, res) => {
+  try {
+    const { name, role, package: pkg, eligibilityCriteria, location, description, lastDateToApply } = req.body;
+
+    await Company.create({
+      name,
+      role,
+      package: pkg,
+      eligibilityCriteria,
+      location,
+      description,
+      lastDateToApply,
+    });
+
+    res.redirect("/tpo/companies");
+  } catch (err) {
+    console.error("Error adding company:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+// 📍 4. Render Edit Company Form
+router.get("/companies/edit/:id", async (req, res) => {
+  try {
+    const company = await Company.findById(req.params.id);
+    res.render("tpo/companyForm", { company });
+  } catch (err) {
+    console.error("Error loading company:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+// 📍 5. Handle Update Company
+router.post("/companies/update/:id", async (req, res) => {
+  try {
+    const { name, role, package: pkg, eligibilityCriteria, location, description, lastDateToApply } = req.body;
+    await Company.findByIdAndUpdate(req.params.id, {
+      name,
+      role,
+      package: pkg,
+      eligibilityCriteria,
+      location,
+      description,
+      lastDateToApply,
+    });
+    res.redirect("/tpo/companies");
+  } catch (err) {
+    console.error("Error updating company:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+// 📍 6. Delete Company
+router.post("/companies/delete/:id", async (req, res) => {
+  try {
+    await Company.findByIdAndDelete(req.params.id);
+    res.redirect("/tpo/companies");
+  } catch (err) {
+    console.error("Error deleting company:", err);
+    res.status(500).send("Server error");
+  }
+});
+
+
+
+
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+

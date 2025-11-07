@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= company ? "Edit Company" : "Add New Company" %></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 30px;
+    }
+    form {
+      background: #fff;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;"><%= company ? "Edit Company" : "Add New Company" %></h1>
+
+  <form action="<%= company ? '/tpo/companies/update/' + company._id : '/tpo/companies' %>" method="POST">
+    <input type="text" name="name" placeholder="Company Name" value="<%= company ? company.name : '' %>" required>
+    <input type="text" name="role" placeholder="Job Role" value="<%= company ? company.role : '' %>" required>
+    <input type="text" name="package" placeholder="Package (e.g. 6 LPA)" value="<%= company ? company.package : '' %>" required>
+    <input type="text" name="eligibilityCriteria" placeholder="Eligibility Criteria" value="<%= company ? company.eligibilityCriteria : '' %>" required>
+    <input type="text" name="location" placeholder="Location" value="<%= company ? company.location : '' %>">
+    <input type="date" name="lastDateToApply" value="<%= company && company.lastDateToApply ? company.lastDateToApply.toISOString().split('T')[0] : '' %>">
+    <textarea name="description" placeholder="Description"><%= company ? company.description : '' %></textarea>
+
+    <button type="submit"><%= company ? "Update" : "Add Company" %></button>
+  </form>
+</body>
+</html>
