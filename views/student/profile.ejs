@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="center">
+  <div class="card">
+    <h1>👤 Student Profile</h1>
+
+    <form action="/student/profile" method="POST">
+      <label>USN:</label>
+      <input type="text" name="usn" value="<%= profile.usn || '' %>" required>
+
+      <label>Study Year:</label>
+      <input type="text" name="studyYear" value="<%= profile.studyYear || '' %>" required>
+
+      <label>CGPA:</label>
+      <input type="number" step="0.01" name="cgpa" value="<%= profile.cgpa || '' %>" required>
+
+      <label>Phone:</label>
+      <input type="text" name="phone" value="<%= profile.phone || '' %>">
+
+      <label>Skills (comma separated):</label>
+      <input type="text" name="skills" value="<%= profile.skills || '' %>">
+
+      <button type="submit" class="btn accent">Save Profile</button>
+    </form>
+
+    <a href="/student/dashboard"><button class="btn">⬅ Back to Dashboard</button></a>
+  </div>
+</div>
+
+</body>
+</html>

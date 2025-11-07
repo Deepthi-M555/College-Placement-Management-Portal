@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
-
 const app = express();
+const studentRoutes = require("./routes/studentRoutes");
 
 // Set EJS as view engine
 app.set("view engine", "ejs");
@@ -12,6 +12,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Body parser
 app.use(express.urlencoded({ extended: true }));
+
+// Use student routes
+app.use("/student", require("./routes/studentRoutes"));
+app.use("/student", studentRoutes);
 
 // ROUTES
 app.get("/", (req, res) => res.render("home"));
