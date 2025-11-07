@@ -3,7 +3,7 @@ const path = require("path");
 require("dotenv").config();
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorHandling");
-
+const tpoRoutes = require("./routes/tpo/tporoutes.js");
 const app = express();
 
 // ✅ JSON body parser (for APIs)
@@ -26,12 +26,14 @@ app.get("/", (req, res) => res.render("home"));
 app.use("/student", require("./routes/studentroutes"));
 
 app.get("/hod/login", (req, res) => res.render("hod-login"));
-app.get("/tpo/login", (req, res) => res.render("tpo/tpologin"));
+app.use("/tpo", tpoRoutes);
+
+
 app.get("/resume-ai", (req, res) => res.render("resume-ai"));
 
 // ✅ API ROUTES
-app.use("/api/auth", require("./routes/auth_route"));
-app.use("/api/tpo", require("./routes/tpo/tpo.auth.routes"));  // ✅ teammate’s TPO routes
+//app.use("/api/auth", require("./routes/auth_route"));
+//app.use("/api/tpo", require("./routes/tpo/tpo.auth.routes"));  // ✅ teammate’s TPO routes
 
 // ✅ Error handlers
 app.use(notFound);

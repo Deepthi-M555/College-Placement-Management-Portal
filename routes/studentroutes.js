@@ -25,16 +25,18 @@ router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    // ✅ Hash password
     const hashed = await bcrypt.hash(password, 10);
 
+    // ✅ Store in MongoDB
     await Student.create({
       name,
       email,
       passwordHash: hashed
     });
 
-    // ✅ Redirect to dashboard after signup
-    return res.redirect("/student/dashboard");
+    // ✅ Redirect to student login page
+    return res.redirect("/student/login");
 
   } catch (err) {
     return res.render("student/studentsignup", {
@@ -43,7 +45,6 @@ router.post("/signup", async (req, res) => {
     });
   }
 });
-
 
 // ✅ Step 4: Show login page
 router.get("/login", (req, res) => {

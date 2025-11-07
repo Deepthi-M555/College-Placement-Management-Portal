@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
-const User = require("../models/User");
+const Tpo = require("../models/tpo/tporoutes");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");

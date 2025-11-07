@@ -1,108 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TPO / Admin Portal</title>
+  <title>TPO – Signup</title>
   <link rel="stylesheet" href="/css/style.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f3f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .center {
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .card {
-      background: #fff;
-      padding: 35px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 25px;
-      font-size: 24px;
-      color: #222;
-    }
-
-    p {
-      color: #555;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-      outline: none;
-      transition: border 0.2s ease;
-    }
-
-    input:focus {
-      border-color: #007bff;
-    }
-
-    .btn {
-      width: 100%;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
-    }
-
-    .link-btn {
-      background: none;
-      border: none;
-      color: #007bff;
-      cursor: pointer;
-      text-decoration: underline;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    .link-btn:hover {
-      color: #0056b3;
-    }
-  </style>
 </head>
 
 <body>
   <div class="center">
     <div class="card">
-      <h1>TPO / Admin Signup</h1>
+      <h1>TPO Signup</h1>
 
-      <!-- Signup Form -->
-      <form action="/tpo/signup" method="POST">
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="email" name="email" placeholder="Official Email" required>
-        <input type="password" name="password" placeholder="Create Password" required>
-        <button type="submit" class="btn">Sign Up</button>
+      <% if (errors && errors.length) { %>
+
+        <div class="error">
+          <% errors.forEach(e => { %><p><%= e.msg %></p><% }) %>
+        </div>
+      <% } %>
+
+      <form method="POST" action="/tpo/signup" class="form">
+        <label>Name</label>
+        <input type="text" name="name" value="<%= (old && old.name) || '' %>" required>
+
+        <label>Email</label>
+        <input type="email" name="email" value="<%= (old && old.email) || '' %>" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <button class="btn" type="submit">Create Account</button>
       </form>
 
-      <!-- Login Prompt -->
-      <p>Already a registered user?</p>
-      <button class="link-btn" onclick="location.href='/tpo/loginpage'">Login Here</button>
+      <p class="muted">
+        Already registered? <a href="/tpo/login">Login</a>
+      </p>
     </div>
   </div>
 </body>
