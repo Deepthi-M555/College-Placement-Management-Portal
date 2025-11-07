@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HOD – Create Account</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="center">
+    <div class="card">
+      <h1>HOD Signup</h1>
+
+      <form method="POST" action="/hod/signup" class="form">
+
+        <label>Full Name</label>
+        <input type="text" name="name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <label>Department</label>
+        <input type="text" name="department" required>
+
+        <button class="btn" type="submit">Create Account</button>
+      </form>
+
+      <p class="muted">
+        Already have an account? <a href="/hod/login">Login here</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
