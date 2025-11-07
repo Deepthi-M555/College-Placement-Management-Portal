@@ -13,3 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate);
 app.use(express.json());
+
+app.listen(port, () => {
+  console.log(`College Placement Management Portal is running at http://localhost:${port}`);
+});
