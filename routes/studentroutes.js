@@ -1,6 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcryptjs")
 
+const StudentProfile = require("../models/StudentProfile.js");
+const Drive = require("../models/drive.js");
+const Application = require("../models/Application.js");
+ 
 const { body, validationResult } = require("express-validator");
 
 const AppError = require("../utils/appError");
@@ -78,8 +82,34 @@ router.post("/login", async (req, res) => {
 });
 
 // ✅ Step 6: Dashboard
-router.get("/dashboard", (req, res) => {
-  res.send("<h1>Welcome to Student Dashboard ✅</h1>");
+router.get("/dashboard", async (req, res) => {
+  try {
+    const studentId = req.user?._id || req.session.studentId; // based on your system
+
+    // 1️⃣ Fetch student profile
+    const profile = await StudentProfile.findOne({ studentId });
+
+    // 2️⃣ Fetch all available drives
+    const drives = await Drive.find();
+
+    // 3️⃣ Fetch drives this student applied to
+    const applications = await Application.find({ studentId })
+      .populate("driveId");
+
+    // 4️⃣ Profile completion check
+    const profileComplete = profile ? true : false;
+    // ✅ Now render a real view instead of res.send()
+    res.render("student/dashboard", {
+      profile,
+      profileComplete,
+      drives,
+      applications
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;
