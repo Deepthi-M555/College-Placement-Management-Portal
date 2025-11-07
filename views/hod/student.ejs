@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+     <%- include('../partials/header') %>
+<h2>Students (Dept: <%= locals.user && locals.user.department %>)</h2>
+
+<form method="get" action="/hod/students">
+  <input name="q" placeholder="Search email/name" value="<%= q||'' %>" />
+  <button>Search</button>
+</form>
+
+<table border="1" cellpadding="6">
+  <tr><th>Name</th><th>Email</th><th>Year</th><th>CGPA</th><th>Skills</th><th>Update</th></tr>
+  <% students.forEach(s => { const p = profMap[String(s._id)] || {}; %>
+    <tr>
+      <td><%= s.name || '' %></td>
+      <td><%= s.email %></td>
+      <form method="post" action="/hod/students/<%= s._id %>">
+        <td><input name="year" value="<%= p.year||'' %>" size="4"/></td>
+        <td><input name="cgpa" value="<%= p.cgpa||'' %>" size="4"/></td>
+        <td><input name="skills" value="<%= (p.skills||[]).join(', ') %>" size="40"/></td>
+        <td><button>Save</button></td>
+      </form>
+    </tr>
+  <% }) %>
+</table>
+
+<p><a href="/hod/reports/students.xlsx">Download Excel</a></p>
+
+</body>
+</html>
