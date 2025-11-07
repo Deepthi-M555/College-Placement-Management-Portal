@@ -1,19 +1,26 @@
 const express = require("express");
-const app = express();
-const port = 8080;
 const path = require("path");
-const { v4: uuidv4 } = require('uuid');
-const methodOverride = require('method-override');
-const ejsMate = require('ejs-mate');
 
+const app = express();
+
+// Set EJS as view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
-app.engine('ejs', ejsMate);
-app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`College Placement Management Portal is running at http://localhost:${port}`);
+// Serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+// Body parser
+app.use(express.urlencoded({ extended: true }));
+
+// ROUTES
+app.get("/", (req, res) => res.render("home"));
+app.get("/student/login", (req, res) => res.render("student.login"));
+app.get("/hod/login", (req, res) => res.render("hod.login"));
+app.get("/tpo/login", (req, res) => res.render("tpo.login"));
+app.get("/resume-ai", (req, res) => res.render("resume.ai"));
+
+// Start server
+app.listen(8080, () => {
+  console.log("✅ Server running on http://localhost:8080");
 });
