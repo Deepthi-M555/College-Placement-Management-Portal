@@ -1,0 +1,48 @@
+<!-- views/hod/approvals.ejs -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Approvals</title>
+  <style>
+    body{font-family: Arial;padding:20px}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:10px;border:1px solid #eee;text-align:left}
+    .btn{padding:6px 10px;border-radius:6px;text-decoration:none;color:#fff}
+    .approve{background:#16a34a}
+    .reject{background:#ef4444}
+    form{display:inline}
+  </style>
+</head>
+<body>
+  <h1>Pending Approvals</h1>
+  <p><a href="/hod/dashboard">← Back to dashboard</a></p>
+
+  <% if (!pending || pending.length === 0) { %>
+    <p>No pending students.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Signed Up</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        <% pending.forEach(function(st){ %>
+          <tr>
+            <td><%= st.name %></td>
+            <td><%= st.email %></td>
+            <td><%= new Date(st.createdAt).toLocaleString() %></td>
+            <td>
+              <form action="/hod/approve/<%= st._id %>" method="POST" style="display:inline">
+                <button class="btn approve" type="submit">Approve</button>
+              </form>
+              <form action="/hod/reject/<%= st._id %>" method="POST" style="display:inline">
+                <button class="btn reject" type="submit">Reject</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</body>
+</html>

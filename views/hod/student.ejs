@@ -1,4 +1,12 @@
-<%- include('../partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+     <%- include('../partials/header') %>
 <h2>Students (Dept: <%= locals.user && locals.user.department %>)</h2>
 
 <form method="get" action="/hod/students">
@@ -23,3 +31,6 @@
 </table>
 
 <p><a href="/hod/reports/students.xlsx">Download Excel</a></p>
+
+</body>
+</html>
