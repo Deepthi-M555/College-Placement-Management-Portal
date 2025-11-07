@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TPO Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      background-color: white;
+      color: #007bff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: #e6e6e6;
+    }
+
+    .container {
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      flex: 1;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    footer {
+      background-color: #fff;
+      text-align: center;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      color: #666;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Placement Management Portal — TPO Dashboard</h1>
+    <button class="logout-btn" onclick="location.href='/tpo/loginpage'">Logout</button>
+  </header>
+
+  <div class="container">
+    <!-- Manage Companies -->
+    <a href="/tpo/companies">
+      <div class="card">
+        <h2>Manage Companies</h2>
+        <p>Add, edit, or view company details for upcoming drives.</p>
+      </div>
+    </a>
+
+    <!-- Placement Drives -->
+    <a href="/tpo/drives">
+      <div class="card">
+        <h2>Placement Drives</h2>
+        <p>Create and manage active placement drives and eligibility.</p>
+      </div>
+    </a>
+
+    <!-- Round Results -->
+    <a href="/tpo/round-results">
+      <div class="card">
+        <h2>Recruitment Rounds</h2>
+        <p>Update round-wise results for shortlisted students.</p>
+      </div>
+    </a>
+
+    <!-- Offer Letters -->
+    <a href="/tpo/offers">
+      <div class="card">
+        <h2>Offer Letters</h2>
+        <p>Upload offer letters and notify selected students.</p>
+      </div>
+    </a>
+
+    <!-- Reports -->
+    <a href="/tpo/reports">
+      <div class="card">
+        <h2>Reports & Analytics</h2>
+        <p>Generate department-wise and offer statistics reports.</p>
+      </div>
+    </a>
+  </div>
+
+  <footer>
+    &copy; <%= new Date().getFullYear() %> College Placement Portal | Developed for Hackathon
+  </footer>
+</body>
+</html>

@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
-
+const tpoAuthRoutes = require("./routes/tpo/tpo.auth.routes");
 const app = express();
+
+app.use(express.json());
 
 // Set EJS as view engine
 app.set("view engine", "ejs");
@@ -17,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => res.render("home"));
 app.get("/student/login", (req, res) => res.render("student-login"));
 app.get("/hod/login", (req, res) => res.render("hod-login"));
-app.get("/tpo/login", (req, res) => res.render("tpo-login"));
+app.use("/tpo", tpoAuthRoutes);
 app.get("/resume-ai", (req, res) => res.render("resume-ai"));
 
 // Start server
