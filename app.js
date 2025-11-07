@@ -22,5 +22,5 @@ app.get("/resume-ai", (req, res) => res.render("resume-ai.ejs"));
 
 // Start server
 app.listen(8080, () => {
-  console.log("✅ Server running on http://localhost:8080");
+  console.log("✅ Server is running on http://localhost:8080");
 });
