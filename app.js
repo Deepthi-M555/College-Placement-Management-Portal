@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorHandling");
 const tpoRoutes = require("./routes/tpo/tporoutes.js");
+const hodRoutes = require("./routes/hod/hodroutes");
 const app = express();
 
 // ✅ JSON body parser (for APIs)
@@ -25,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.render("home"));
 app.use("/student", require("./routes/studentroutes"));
 
-app.get("/hod/login", (req, res) => res.render("hod-login"));
+app.use("/hod", hodRoutes);
 app.use("/tpo", tpoRoutes);
 
 
