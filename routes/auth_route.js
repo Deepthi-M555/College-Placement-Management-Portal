@@ -1,3 +1,24 @@
+
+const express = require('express');
+const router = express.Router();
+
+// Simple health endpoint for auth
+router.get('/ping', (req, res) => res.json({ ok: true, msg: 'auth route responding' }));
+
+// POST /api/auth/register  (placeholder)
+router.post('/register', (req, res) => {
+  // In real app: validate, hash password, store user
+  return res.status(201).json({ msg: 'register endpoint (placeholder)', body: req.body });
+});
+
+// POST /api/auth/login (placeholder)
+router.post('/login', (req, res) => {
+  // In real app: check credentials and return JWT/session
+  const { email } = req.body || {};
+  return res.json({ msg: 'login endpoint (placeholder)', email: email || null });
+});
+
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 const { body, validationResult } = require("express-validator");
@@ -5,7 +26,7 @@ const Tpo = require("../models/tpo/tporoutes");
 const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asyncHandler");
 const generateToken = require("../utils/generateToken");
-const router = express.Router();
+
 
 // ✅ Signup Route (All logic here)
 router.post(
@@ -142,4 +163,5 @@ router.post(
     res.status(200).json({ message: "Logged out successfully" });
   })
 );
+
 module.exports = router;

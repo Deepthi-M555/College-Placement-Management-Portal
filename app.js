@@ -4,16 +4,24 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorHandling");
 
+
 const tpoRoutes = require("./routes/tpo/tporoutes.js");
 const hodRoutes = require("./routes/hod/hodroutes");
 const studentRoutes = require("./routes/studentroutes");
 const pdfRoutes = require("./modules/resume/routes/pdf.routes.js");
 
+
+
+const tpoRoutes = require("./routes/tpo/tporoutes.js");
+const hodRoutes = require("./routes/hod/hodroutes");
+
+const app = express();
+
 // ✅ Resume Module routes
 const resumeRoutes = require("./modules/resume/routes/resume.routes");
 const aiRoutes = require("./modules/resume/routes/ai.routes.js");
 const scoringRoutes = require("./modules/resume/routes/scoring.routes");
-const app = express();
+
 const atsRoute = require("./modules/resume/routes/atsRoute");
 
 
@@ -53,15 +61,27 @@ app.use("/resume", atsRoute);
 // -------------------------------
 app.get("/", (req, res) => res.render("home"));
 
+app.get("/student/login", (req, res) => res.render("student-login"));
+app.use("/hod", require("./routes/hod/hod.routes.js"));
+app.use("/tpo", require("./routes/tpo/tpo.auth.routes"));
+
+app.use("/student", require("./routes/studentroutes"));
+
 app.use("/student", studentRoutes);
 app.use("/hod", hodRoutes);
 app.use("/tpo", tpoRoutes);
 
 
+app.get("/resume-ai", (req, res) => res.render("resume-ai"));
 
-// -------------------------------
-// Error handlers
-// -------------------------------
+// ✅ API ROUTES
+//app.use("/api/auth", require("./routes/auth_route"));
+
+app.use("/api/tpo", require("./routes/tpo/tpo.auth.routes"));  // ✅ teammate’s TPO routes
+
+//app.use("/api/tpo", require("./routes/tpo/tpo.auth.routes"));  // ✅ teammate’s TPO routes
+
+// ✅ Error handlers
 app.use(notFound);
 app.use(errorHandler);
 // ✅ DB + Server start
