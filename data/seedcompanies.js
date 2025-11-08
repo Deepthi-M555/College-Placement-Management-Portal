@@ -69,7 +69,7 @@ const dummyCompanies = [
 
 async function seedDB() {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/placementPortal");
+    await mongoose.connect(process.env.MONGO_URI ||"mongodb://localhost:27017/cpmp ");
     console.log("Connected to MongoDB");
     await Company.deleteMany({});
     await Company.insertMany(dummyCompanies);

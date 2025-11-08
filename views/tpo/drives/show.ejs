@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= drive.company %> - Drive Details</title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f9fafb;
+      font-family: "Inter", system-ui, sans-serif;
+      color: #1f2937;
+    }
+    main.container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+    .meta {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .active {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .completed {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+    section {
+      margin-top: 1.5rem;
+    }
+    section h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 0.25rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      color: #374151;
+      font-weight: 600;
+      background: #f9fafb;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .btn-secondary:hover {
+      background: #d1d5db;
+      transform: translateY(-1px);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1><%= drive.company %></h1>
+    <p class="meta">
+      <strong><%= drive.title %></strong><br />
+      <span><%= drive.mode %> Mode • <%= drive.venue || "Venue not specified" %></span><br />
+      <span>Last updated: <%= new Date(drive.updatedAt).toLocaleString() %></span><br />
+      <span class="badge <%= drive.isActive ? 'active' : 'completed' %>">
+        <%= drive.isActive ? "Active" : "Completed" %>
+      </span>
+    </p>
+
+    <section>
+      <h2>Drive Description</h2>
+      <p><%= drive.description || "No description available." %></p>
+    </section>
+
+    <section>
+      <h2>Rounds Overview</h2>
+      <% if (!drive.rounds || drive.rounds.length === 0) { %>
+        <p>No rounds added yet.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Selected</th>
+              <th>Rejected</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% drive.rounds.forEach(r => { %>
+              <tr>
+                <td><%= r.roundName %></td>
+                <td><%= r.roundType || '—' %></td>
+                <td><%= r.date ? new Date(r.date).toLocaleDateString() : '—' %></td>
+                <td><%= r.selectedStudents?.length || 0 %></td>
+                <td><%= r.rejectedStudents?.length || 0 %></td>
+                <td><%= r.remarks || '—' %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+
+    <!-- Button group -->
+    <div class="btn-group">
+      
+      <a href="/tpo/drives/<%= drive._id %>/analytics/new" role="button" class="contrast">Enter Statistics</a>
+
+      
+      <a href="/tpo/round-results/new/<%= drive._id %>" role="button">+ Add Round</a>
+      <a href="/tpo/drives" class="btn btn-secondary">← Back to Drives</a>
+
+    </div>
+  </main>
+</body>
+</html>

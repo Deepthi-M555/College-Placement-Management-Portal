@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>New Placement Drive</title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <style>
+    body { background: #f9fafb; }
+    main { max-width: 700px; margin: 3rem auto; background: #fff; padding: 2rem; border-radius: .75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    h1 { text-align: center; color: #0f172a; }
+    form { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Add New Drive</h1>
+    <form method="post" action="/tpo/drives">
+      <label>Company Name
+        <input type="text" name="company" placeholder="e.g. Infosys" required />
+      </label>
+      <label>Drive Title
+        <input type="text" name="title" placeholder="e.g. Software Engineer Hiring Drive" required />
+      </label>
+      <label>Description
+        <textarea name="description" rows="3" placeholder="Enter brief details about the drive..."></textarea>
+      </label>
+      <label>Mode
+        <select name="mode">
+          <option>Offline</option>
+          <option>Online</option>
+          <option>Hybrid</option>
+        </select>
+      </label>
+      <label>Venue
+        <input type="text" name="venue" placeholder="e.g. Main Auditorium" />
+      </label>
+      <label>
+        <input type="checkbox" name="isActive" checked /> Active Drive
+      </label>
+      <button type="submit">Create Drive</button>
+    </form>
+    <a href="/tpo/drives" role="button" class="secondary" style="margin-top:1rem;">Back</a>
+  </main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Placement Drive</title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <style>
+    body { background: #f9fafb; }
+    main { max-width: 700px; margin: 3rem auto; background: #fff; padding: 2rem; border-radius: .75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    h1 { text-align: center; color: #0f172a; }
+    form { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Edit Drive</h1>
+    <form method="post" action="/tpo/drives/<%= drive._id %>">
+      <label>Company Name
+        <input type="text" name="company" value="<%= drive.company %>" required />
+      </label>
+      <label>Drive Title
+        <input type="text" name="title" value="<%= drive.title %>" required />
+      </label>
+      <label>Description
+        <textarea name="description" rows="3"><%= drive.description %></textarea>
+      </label>
+      <label>Mode
+        <select name="mode">
+          <option <%= drive.mode === 'Offline' ? 'selected' : '' %>>Offline</option>
+          <option <%= drive.mode === 'Online' ? 'selected' : '' %>>Online</option>
+          <option <%= drive.mode === 'Hybrid' ? 'selected' : '' %>>Hybrid</option>
+        </select>
+      </label>
+      <label>Venue
+        <input type="text" name="venue" value="<%= drive.venue %>" />
+      </label>
+      <label>
+        <input type="checkbox" name="isActive" <%= drive.isActive ? 'checked' : '' %> /> Active Drive
+      </label>
+      <button type="submit">Save Changes</button>
+    </form>
+    <a href="/tpo/drives" role="button" class="secondary" style="margin-top:1rem;">Cancel</a>
+  </main>
+</body>
+</html>

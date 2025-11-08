@@ -25,6 +25,10 @@ const ApplicationSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    resumeUrl: { 
+      type: String 
+    },  
+    coverLetter: { type: String },
     currentStatus: {
       type: String,
       enum: APP_STATUS,

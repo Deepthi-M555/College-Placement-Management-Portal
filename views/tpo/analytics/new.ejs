@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enter Placement Statistics</title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <style>
+    body { background: #f9fafb; font-family: "Inter", sans-serif; color: #1f2937; }
+    main { max-width: 900px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 1rem; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+    h1 { margin-bottom: 1rem; color: #111827; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border-bottom: 1px solid #e5e7eb; padding: 0.75rem; text-align: left; }
+    th { background: #f3f4f6; color: #374151; }
+    button { margin-top: 1rem; background: #2563eb; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>📈 Enter Placement Statistics for <%= drive.company %></h1>
+    <p><strong>Drive:</strong> <%= drive.title %></p>
+
+    <form method="POST" action="/tpo/drives/<%= drive._id %>/analytics">
+      <table>
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th>Total Students</th>
+            <th>Students Placed</th>
+            <th>Average Package (LPA)</th>
+            <th>Highest Package (LPA)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% const depts = ["CSE", "ECE", "ISE", "ME", "EEE", "CIVIL", "AIML"]; %>
+          <% depts.forEach((dept, i) => { %>
+            <tr>
+              <td><input type="text" name="departments[<%= i %>][department]" value="<%= dept %>" readonly></td>
+              <td><input type="number" name="departments[<%= i %>][totalStudents]" min="0" required></td>
+              <td><input type="number" name="departments[<%= i %>][studentsPlaced]" min="0" required></td>
+              <td><input type="number" name="departments[<%= i %>][averagePackage]" step="0.1" min="0" required></td>
+              <td><input type="number" name="departments[<%= i %>][highestPackage]" step="0.1" min="0" required></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <button type="submit">💾 Save Statistics</button>
+    </form>
+
+    <a href="/tpo/drives/<%= drive._id %>" style="display:inline-block;margin-top:1rem;">← Back to Drive Details</a>
+  </main>
+</body>
+</html>

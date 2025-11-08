@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Placement Analytics Dashboard</title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: #f9fafb;
+      font-family: "Inter", system-ui, sans-serif;
+      color: #1f2937;
+    }
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      text-align: center;
+      color: #111827;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: #f3f4f6;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      margin-bottom: 0.25rem;
+      color: #2563eb;
+      font-size: 1.3rem;
+    }
+    .card p {
+      margin: 0;
+      color: #4b5563;
+    }
+    .chart-container {
+      position: relative;
+      height: 280px;
+      margin-top: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    th {
+      background: #f9fafb;
+      color: #374151;
+    }
+    .no-data {
+      text-align: center;
+      color: #6b7280;
+      padding: 2rem;
+      border: 1px dashed #d1d5db;
+      border-radius: 0.75rem;
+      background: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>📊 Placement Analytics Dashboard</h1>
+
+    <% if (!analytics || analytics.length === 0) { %>
+      <div class="no-data">
+        <p>No analytics data available yet.</p>
+        <p><a href="/tpo/drives" style="color:#2563eb;">← Back to Drives</a></p>
+      </div>
+    <% } else { %>
+      <% analytics.forEach((a, index) => { %>
+        <div class="card">
+          <h2><%= a.company %></h2>
+          <p><strong>Drive:</strong> <%= a.driveTitle %></p>
+          <p><strong>Total Offers:</strong> <%= a.totalOffers %></p>
+
+          <div class="chart-container">
+            <canvas id="chart-<%= index %>"></canvas>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Students Placed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% a.departmentStats.forEach(dep => { %>
+                <tr>
+                  <td><%= dep.department %></td>
+                  <td><%= dep.studentsPlaced %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% }) %>
+    <% } %>
+  </main>
+
+  <!-- Safe JSON block -->
+  <script id="analyticsData" type="application/json">
+    <%- JSON.stringify(analytics) %>
+  </script>
+
+  <!-- Chart.js Rendering Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const analyticsJSON = document.getElementById("analyticsData").textContent;
+      const analyticsData = JSON.parse(analyticsJSON || "[]");
+
+      analyticsData.forEach((a, index) => {
+        const ctx = document.getElementById(`chart-${index}`).getContext("2d");
+        const labels = a.departmentStats.map(d => d.department);
+        const data = a.departmentStats.map(d => d.studentsPlaced);
+
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: [
+                "#2563eb", "#10b981", "#f59e0b", "#ef4444",
+                "#8b5cf6", "#06b6d4", "#84cc16"
+              ],
+              borderColor: "#fff",
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: "bottom" },
+              tooltip: {
+                callbacks: {
+                  label: function(tooltipItem) {
+                    return tooltipItem.label + ": " + tooltipItem.formattedValue + " students";
+                  }
+                }
+              }
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

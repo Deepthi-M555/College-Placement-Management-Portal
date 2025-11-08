@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.render("home"));
 app.get("/student/login", (req, res) => res.render("student-login"));
 app.get("/hod/login", (req, res) => res.render("hod-login"));
-app.get("/tpo/login", (req, res) => res.render("tpo/tpologin"));
+app.use("/tpo", require("./routes/tpo/tpo.auth.routes"));
 app.get("/resume-ai", (req, res) => res.render("resume-ai"));
 
 // ✅ API ROUTES

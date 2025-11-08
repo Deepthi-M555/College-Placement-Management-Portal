@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add New Round — <%= drive.company %></title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f9fafb;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+    main {
+      max-width: 750px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      text-align: center;
+      color: #2563eb;
+      margin-bottom: 0.5rem;
+    }
+    p.subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+    label {
+      font-weight: 500;
+      color: #374151;
+    }
+    input, textarea, select {
+      width: 100%;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 1.5rem;
+      text-decoration: none;
+      background: #e5e7eb;
+      color: #1f2937;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+    }
+    .back:hover {
+      background: #d1d5db;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Add New Round</h1>
+    <p class="subtitle">For drive: <strong><%= drive.company %> — <%= drive.title %></strong></p>
+
+    <form action="/tpo/round-results/new/<%= drive._id %>" method="POST">
+      <label>Round Name</label>
+      <input type="text" name="roundName" placeholder="e.g. Technical Interview" required />
+
+      <label>Round Type</label>
+      <select name="roundType" required>
+        <option value="">Select Type</option>
+        <option value="Test">Aptitude Test</option>
+        <option value="Technical">Technical Interview</option>
+        <option value="HR">HR Interview</option>
+        <option value="GD">Group Discussion</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Date</label>
+      <input type="date" name="date" />
+
+      <label>Total Participants</label>
+      <input type="number" name="totalParticipants" placeholder="Enter number" />
+
+      <label>Selected Students (comma separated)</label>
+      <textarea name="selectedStudents" rows="2" placeholder="e.g. Arjun, Sneha, Diya"></textarea>
+
+      <label>Rejected Students (comma separated)</label>
+      <textarea name="rejectedStudents" rows="2" placeholder="e.g. Karthik, Ramesh"></textarea>
+
+      <label>Remarks</label>
+      <textarea name="remarks" rows="3" placeholder="Any notes about this round..."></textarea>
+
+      <button type="submit">Save Round</button>
+    </form>
+
+    <a href="/tpo/round-results/show/<%= drive._id %>" class="back">← Back</a>
+  </main>
+</body>
+</html>

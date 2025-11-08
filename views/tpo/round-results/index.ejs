@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Round Results Dashboard</title>
+
+  <!-- Pico CSS for clean design -->
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      background: #f9fafb;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      text-align: center;
+      color: #2563eb;
+      margin-bottom: 0.25rem;
+    }
+    p.subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+    a.btn {
+      background: #2563eb;
+      color: white;
+      padding: 0.45rem 0.8rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    a.btn:hover {
+      background: #1d4ed8;
+    }
+    .chart-wrap {
+      margin-top: 2rem;
+      background: #f3f4f6;
+      border-radius: .75rem;
+      padding: 1rem;
+    }
+    .empty {
+      text-align: center;
+      color: #6b7280;
+      border: 2px dashed #e5e7eb;
+      border-radius: .75rem;
+      padding: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Recruitment Round Dashboard</h1>
+    <p class="subtitle">Overview of all company drives and their average pass rates.</p>
+
+    <% if (!drives.length) { %>
+      <div class="empty">
+        <p>No drives found in the database.</p>
+      </div>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Drive Title</th>
+            <th>Rounds</th>
+            <th>Avg Pass Rate</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% drives.forEach(d => {
+            let total = 0, selected = 0;
+            (d.rounds || []).forEach(r => {
+              total += r.totalParticipants || 0;
+              selected += (r.selectedStudents || []).length || 0;
+            });
+            const avg = total ? Math.round((selected / total) * 100) : 0;
+          %>
+            <tr>
+              <td><%= d.company %></td>
+              <td><%= d.title %></td>
+              <td><%= d.rounds.length %></td>
+              <td><%= avg %>%</td>
+              <td><%= d.isActive ? "Active" : "Completed" %></td>
+              <td>
+                <a class="btn" href="/tpo/round-results/show/<%= d._id %>">View</a>
+                <a class="btn" href="/tpo/round-results/new/<%= d._id %>">+ Add</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <div class="chart-wrap">
+        <h3 style="text-align:center;margin-bottom:1rem;">Average Pass Rate by Drive</h3>
+        <canvas id="drivePassChart" height="120"></canvas>
+      </div>
+    <% } %>
+  </main>
+
+  <!-- Safe JSON data block -->
+  <script id="driveData" type="application/json">
+    <%- JSON.stringify(drives) %>
+  </script>
+
+  <!-- Chart.js script -->
+  <script>
+    (function() {
+      const drives = JSON.parse(document.getElementById("driveData").textContent || "[]");
+      if (!drives.length) return;
+
+      const labels = drives.map(d => d.company);
+      const data = drives.map(d => {
+        let total = 0, selected = 0;
+        (d.rounds || []).forEach(r => {
+          total += r.totalParticipants || 0;
+          selected += (r.selectedStudents || []).length || 0;
+        });
+        return total ? Math.round((selected / total) * 100) : 0;
+      });
+
+      const ctx = document.getElementById('drivePassChart');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Average Pass Rate (%)',
+            data,
+            borderWidth: 1,
+            backgroundColor: 'rgba(37, 99, 235, 0.6)',
+            borderColor: '#2563eb'
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, max: 100 } }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

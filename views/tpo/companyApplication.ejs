@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= company || "Company" %> — Applied Students</title>
+  <link href="https://unpkg.com/@picocss/pico@2/css/pico.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f9fafb;
+      font-family: "Inter", system-ui, sans-serif;
+      color: #1f2937;
+    }
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: .75rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    h1 {
+      color: #2563eb;
+      margin-bottom: 0.5rem;
+    }
+    p.subtitle {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    .btn {
+      background: #2563eb;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+    }
+    .empty {
+      text-align: center;
+      padding: 2rem;
+      border: 2px dashed #d1d5db;
+      border-radius: .75rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><%= company %></h1>
+    <p class="subtitle">List of all students who applied for this company’s drives.</p>
+
+    <% if (!applications.length) { %>
+      <div class="empty">
+        <p>No students have applied yet for this company’s drives.</p>
+      </div>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Drive Title</th>
+            <th>Current Status</th>
+            <th>AI Score</th>
+            <th>Resume</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% applications.forEach(a => { %>
+            <tr>
+              <td><%= a.studentId?.name || "—" %></td>
+              <td><%= a.studentId?.email || "—" %></td>
+              <td><%= a.driveId?.title || "—" %></td>
+              <td><%= a.currentStatus %></td>
+              <td><%= a.aiScore ? (a.aiScore * 100).toFixed(1) + "%" : "—" %></td>
+              <td>
+                <% if (a.resumeUrl) { %>
+                  <a href="<%= a.resumeUrl %>" target="_blank" class="btn">View</a>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+
+    <div style="text-align:center; margin-top:2rem;">
+      <a href="/tpo/companies" class="btn">← Back to Companies</a>
+    </div>
+  </main>
+</body>
+</html>
