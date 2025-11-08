@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; }
+    h1, h2 { margin: 0; padding: 0; }
+    .section { margin-top: 25px; }
+    .skills li { margin-bottom: 4px; }
+  </style>
+</head>
+
+<body>
+
+  <h1><%= resume.basics.name %></h1>
+  <p><%= resume.basics.email %></p>
+  <p><%= resume.basics.summary %></p>
+
+  <div class="section">
+    <h2>Skills</h2>
+    <ul class="skills">
+      <% resume.skills.forEach(s => { %>
+        <li><%= s %></li>
+      <% }) %>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Experience</h2>
+    <p><%= resume.experience %></p>
+  </div>
+
+  <div class="section">
+    <h2>Projects</h2>
+    <p><%= resume.projects %></p>
+  </div>
+
+</body>
+</html>

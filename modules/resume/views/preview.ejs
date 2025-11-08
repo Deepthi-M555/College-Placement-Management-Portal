@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      line-height: 1.5;
+    }
+
+    h1, h2 {
+      margin-top: 0;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ BASIC INFORMATION -->
+  <h1 id="name"><%= resume.basics.name %></h1>
+  <p id="email"><%= resume.basics.email %></p>
+  <p id="summary"><%= resume.basics.summary %></p>
+
+
+  <!-- ✅ SKILLS -->
+  <h2>Skills</h2>
+  <ul id="skills-list">
+    <% (resume.skills || []).forEach(skill => { %>
+      <li><%= skill %></li>
+    <% }) %>
+  </ul>
+
+
+  <!-- ✅ EXPERIENCE -->
+  <h2>Experience</h2>
+  <div id="experience-section">
+    <% (resume.experience || []).forEach(item => { %>
+      <p><%= item %></p>
+    <% }) %>
+  </div>
+
+
+  <!-- ✅ PROJECTS -->
+  <h2>Projects</h2>
+  <div id="projects-section">
+    <% (resume.projects || []).forEach(item => { %>
+      <p><%= item %></p>
+    <% }) %>
+  </div>
+
+
+  <!-- ✅ LIVE PREVIEW LISTENER -->
+  <script>
+    window.addEventListener("message", function(event) {
+      const data = event.data;
+      if (!data || !data.resume) return;
+
+      const r = data.resume;
+
+      // ✅ Update basic info
+      document.getElementById("name").innerText = r.basics?.name || "";
+      document.getElementById("email").innerText = r.basics?.email || "";
+      document.getElementById("summary").innerText = r.basics?.summary || "";
+
+      // ✅ Update skills
+      const skillBox = document.getElementById("skills-list");
+      skillBox.innerHTML = "";
+      (r.skills || []).forEach(skill => {
+        const li = document.createElement("li");
+        li.innerText = skill;
+        skillBox.appendChild(li);
+      });
+
+      // ✅ Update experience
+      const expBox = document.getElementById("experience-section");
+      expBox.innerHTML = "";
+      (r.experience || []).forEach(exp => {
+        const p = document.createElement("p");
+        p.innerText = exp;
+        expBox.appendChild(p);
+      });
+
+      // ✅ Update projects
+      const projBox = document.getElementById("projects-section");
+      projBox.innerHTML = "";
+      (r.projects || []).forEach(proj => {
+        const p = document.createElement("p");
+        p.innerText = proj;
+        projBox.appendChild(p);
+      });
+    });
+  </script>
+
+</body>
+</html>
